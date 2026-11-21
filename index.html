@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANY VPN — кейс G0d0v</title>
+<meta name="description" content="ANY VPN: Telegram WebApp, ANY VPN CONTROL и сервисная архитектура. Продукт, интерфейсы и инженерия — G0d0v.">
+<meta property="og:title" content="ANY VPN — один кабинет, все подключения">
+<meta property="og:description" content="Telegram WebApp · ANY VPN CONTROL · PostgreSQL 18 · Happ. Кейс G0d0v.">
+<meta property="og:image" content="assets/webapp-desktop.jpg">
+<meta name="theme-color" content="#0b1020">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1020;--bg2:#111a2e;--surface:#151d2f;--line:#ffffff14;--text:#e8eefc;--muted:#9fb0cc;--blue:#6c9dff;--violet:#a78bfa;--teal:#82cab7;--amber:#e5a54f;--pink:#e07bb0}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Manrope,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(900px 600px at 85% -10%,#4f7fe933,transparent 60%),radial-gradient(800px 600px at -10% 110%,#8b5cf62a,transparent 60%);pointer-events:none;z-index:-1}
+a{color:var(--blue);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(14px);background:#0b1020b3;border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;color:var(--text)}
+.brand i{width:30px;height:30px;border-radius:10px;background:linear-gradient(140deg,#6c9dff,#3653b8);display:grid;place-items:center;box-shadow:0 0 24px #527ffc55}
+nav ul{display:flex;gap:26px;list-style:none;padding:0;font-size:14px}
+nav ul a{color:var(--muted)}nav ul a:hover{color:var(--text)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:96px 0 70px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:5px;color:#8fb0ee;text-transform:uppercase}
+h1{font-size:clamp(42px,6vw,76px);line-height:1.02;letter-spacing:-2px;margin:18px 0 22px;font-weight:800;background:linear-gradient(90deg,#fff,#b9cdf7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:19px;color:var(--muted);max-width:560px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#ffffff0d;border:1px solid var(--line);font-size:14px;font-weight:600;color:#d6deef}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal);animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.cta{display:flex;gap:12px;margin-top:34px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:16px;font-weight:700;font-size:15px}
+.btn.primary{background:linear-gradient(125deg,#639aff,#4473ed);color:#fff;box-shadow:0 10px 30px #386de755}
+.btn.ghost{border:1px solid var(--line);color:var(--text);background:#ffffff08}
+.orbit{position:relative;aspect-ratio:1;max-width:420px;margin-left:auto;width:100%}
+.orbit .ring{position:absolute;inset:6%;border:1px solid #79a9ff33;border-radius:50%;transform:rotate(-24deg) scaleY(.8)}
+.orbit .ring.b{inset:16%;border-color:#a78bfa40;transform:rotate(32deg) scaleY(.82)}
+.orbit .spin{position:absolute;inset:6%;border-radius:50%;animation:spin 18s linear infinite}
+.orbit .spin.rev{inset:18%;animation-duration:26s;animation-direction:reverse}
+.orbit .spin span{position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:#8dafff;box-shadow:0 0 18px #8dafff}
+.orbit .spin.rev span{background:var(--teal);box-shadow:0 0 18px var(--teal);width:9px;height:9px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.core{position:absolute;inset:32%;border-radius:32%;background:linear-gradient(140deg,#6c9dff,#3653b8);box-shadow:0 0 90px #527ffc66,inset 2px 3px 3px #ffffff55,inset -6px -8px 20px #1c306f;display:grid;place-items:center;transform:rotate(-8deg)}
+.core svg{width:44%;transform:rotate(8deg)}
+section.wrap{padding-top:80px;padding-bottom:20px}
+h2{font-size:clamp(30px,3.6vw,44px);letter-spacing:-1px;line-height:1.1;margin-bottom:14px}
+.sub{color:var(--muted);max-width:680px;font-size:17px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:10px}
+.stat{padding:22px;border-radius:22px;background:linear-gradient(160deg,#ffffff0c,#ffffff04);border:1px solid var(--line)}
+.stat b{display:block;font-size:34px;letter-spacing:-1px}
+.stat span{color:var(--muted);font-size:14px}
+.gallery{display:flex;gap:26px;overflow-x:auto;padding:34px 4px 18px;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.phone{flex:0 0 250px;scroll-snap-align:start}
+.phone .frame{border-radius:38px;padding:9px;background:linear-gradient(160deg,#2a3550,#111827);box-shadow:0 30px 60px #0008,0 0 0 1px #ffffff1a;transition:transform .4s}
+.phone:hover .frame{transform:translateY(-6px)}
+.phone img{display:block;width:100%;border-radius:30px}
+.phone p{margin-top:14px;font-weight:700}.phone small{display:block;color:var(--muted);font-weight:500}
+.desktop{margin-top:40px;border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px #0009}
+.desktop img{display:block;width:100%}
+.note{color:#7f8ca6;font-size:13px;margin-top:14px}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:34px}
+.card{padding:26px;border-radius:24px;background:var(--surface);border:1px solid var(--line);transition:border-color .3s,transform .3s}
+.card:hover{border-color:#6c9dff55;transform:translateY(-3px)}
+.icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px}
+.icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:17px;margin-bottom:8px}.card p{color:var(--muted);font-size:14px}
+.c-blue{background:#6c9dff22;color:var(--blue)}.c-violet{background:#a78bfa22;color:var(--violet)}.c-teal{background:#82cab722;color:var(--teal)}.c-amber{background:#e5a54f22;color:var(--amber)}.c-pink{background:#e07bb022;color:var(--pink)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.control img{width:100%;border-radius:22px;border:1px solid var(--line);box-shadow:0 30px 60px #0008}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:34px;align-items:stretch}
+.node{position:relative;padding:20px;border-radius:20px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.node b{display:block;margin-bottom:6px}.node span{color:var(--muted);font-size:13px}
+.node:not(:last-child)::after{content:'→';position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:#6c9dff;font-weight:800;z-index:1}
+.principles{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.principle{padding:24px 26px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(160deg,#ffffff08,transparent)}
+.principle h3{font-size:17px;margin-bottom:6px}.principle p{color:var(--muted);font-size:14px}
+.status{padding:30px;border-radius:26px;background:linear-gradient(135deg,#4f7fe91f,#8b5cf61a);border:1px solid #6c9dff33}
+.status ul{margin-top:14px;padding-left:20px;color:#c9d5ee;display:grid;gap:6px}
+footer{padding:50px 0 60px;color:#7f8ca6;font-size:14px;border-top:1px solid var(--line);margin-top:40px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:960px){.hero{grid-template-columns:1fr;padding-top:60px}.orbit{margin:0 auto;max-width:320px}.features{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.split,.principles{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.node:not(:last-child)::after{content:'↓';right:50%;top:auto;bottom:-15px;transform:translateX(50%)}nav ul{display:none}}
+@media(max-width:560px){.wrap{padding:0 16px}.features{grid-template-columns:1fr}.phone{flex-basis:220px}.lead{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><a class="brand" href="#"><i><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg></i>ANY VPN</a>
+<ul><li><a href="#ui">Интерфейс</a></li><li><a href="#features">Возможности</a></li><li><a href="#control">CONTROL</a></li><li><a href="#arch">Архитектура</a></li><li><a href="https://github.com/G0d0v">G0d0v</a></li></ul></div></nav>
+
+<header class="wrap hero">
+  <div>
+    <div class="eyebrow">Кейс · G0d0v</div>
+    <h1>Один кабинет.<br>Все подключения.</h1>
+    <p class="lead">ANY VPN объединяет подписки, оплату, устройства, бонусы и поддержку в одном кабинете внутри Telegram. Подключение — в один тап через Happ.</p>
+    <div class="chips"><span class="chip"><span class="dot"></span>Идёт запуск</span><span class="chip">Telegram WebApp</span><span class="chip">PostgreSQL 18</span><span class="chip">Исходный код закрыт</span></div>
+    <div class="cta"><a class="btn primary" href="#ui">Смотреть интерфейс ↓</a><a class="btn ghost" href="https://github.com/G0d0v/any-vpn-showcase">Репозиторий кейса</a></div>
+  </div>
+  <div class="orbit" aria-hidden="true"><div class="ring"></div><div class="ring b"></div><div class="spin"><span></span></div><div class="spin rev"><span></span></div>
+    <div class="core"><svg viewBox="0 0 24 24" fill="none" stroke="#eef3ff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div></div>
+</header>
+
+<section class="wrap" aria-label="Цифры">
+  <div class="stats">
+    <div class="stat"><b>278</b><span>автотестов, в том числе на PostgreSQL 18</span></div>
+    <div class="stat"><b>1 тап</b><span>до подключения через Happ crypt5</span></div>
+    <div class="stat"><b>30 / 70</b><span>доли только с реальных поступлений</span></div>
+    <div class="stat"><b>0</b><span>известных уязвимостей в зависимостях</span></div>
+  </div>
+</section>
+
+<section class="wrap" id="ui">
+  <h2>Интерфейс, который хочется открывать</h2>
+  <p class="sub">Тёмные объёмные поверхности, мягкий свет и цветные функциональные иконки. Движение отвечает на действия и замирает, когда его не видно.</p>
+  <div class="gallery">
+    <figure class="phone"><div class="frame"><img src="assets/webapp-home.jpg" alt="Главная личного кабинета" loading="lazy"></div><p>Главная<small>статус, баланс, быстрые действия</small></p></figure>
+    <figure class="phone"><div class="frame"><img src="assets/webapp-wheel.jpg" alt="Колесо бонусов" loading="lazy"></div><p>Колесо бонусов<small>серверный результат, раз в 12 часов</small></p></figure>
+    <figure class="phone"><div class="frame"><img src="assets/webapp-setup.jpg" alt="Инструкция Happ" loading="lazy"></div><p>Подключение<small>только Happ, по платформам</small></p></figure>
+    <figure class="phone"><div class="frame"><img src="assets/webapp-servers.jpg" alt="Скорость серверов" loading="lazy"></div><p>Серверы<small>последние замеры скорости</small></p></figure>
+    <figure class="phone"><div class="frame"><img src="assets/webapp-partner.jpg" alt="Партнёрская программа в профиле" loading="lazy"></div><p>Профиль<small>партнёрские условия и безопасность</small></p></figure>
+  </div>
+  <div class="desktop"><img src="assets/webapp-desktop.jpg" alt="Личный кабинет на широком экране" loading="lazy"></div>
+  <p class="note">Реальные снимки сборки. Все данные на снимках — демонстрационные.</p>
+</section>
+
+<section class="wrap" id="features">
+  <h2>Что внутри</h2>
+  <p class="sub">Каждая возможность продумана с позиции клиента и денег: ничего оплаченного не теряется, ничего не списывается неявно.</p>
+  <div class="features">
+    <div class="card"><div class="icon c-blue"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/></svg></div><h3>Личный кабинет</h3><p>Подписки, тарифы, кошелёк, история, устройства, смена локации — React 19 и TypeScript.</p></div>
+    <div class="card"><div class="icon c-teal"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg></div><h3>Подключение Happ</h3><p>Только зашифрованная ссылка crypt5 из авторизованного кабинета, без открытого адреса подписки.</p></div>
+    <div class="card"><div class="icon c-amber"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="3"/><path d="M2 10h20M6 15h4"/></svg></div><h3>Платежи</h3><p>Копейки, идемпотентные счета, сверка суммы и транзакции провайдера, read-only проверка статуса.</p></div>
+    <div class="card"><div class="icon c-violet"><svg viewBox="0 0 24 24"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 22V7M12 7a3 3 0 1 0-3-3c0 2 3 3 3 3zm0 0a3 3 0 1 1 3-3c0 2-3 3-3 3z"/></svg></div><h3>Бонусы и промо</h3><p>Колесо с дневным бюджетом, отдельный бонусный баланс, резерв промокодов до подтверждённой оплаты.</p></div>
+    <div class="card"><div class="icon c-pink"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h3>Оплаченные права</h3><p>Продление не снижает купленные устройства до конца срока и не клонирует пакеты трафика.</p></div>
+    <div class="card"><div class="icon c-blue"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 11l2 2 4-4"/></svg></div><h3>Партнёры</h3><p>Персональные условия и тестовые ключи: резерв квоты до вызова панели, сверка по метке заказа.</p></div>
+    <div class="card"><div class="icon c-teal"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div><h3>PostgreSQL 18</h3><p>Перенос SQLite со сверкой хешей строк, учения бэкапа и восстановления, план отката.</p></div>
+    <div class="card"><div class="icon c-amber"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div><h3>Эксплуатация</h3><p>Docker non-root и read-only, приватная сеть БД, HTTPS, мониторинг здоровья и свежести бэкапов.</p></div>
+  </div>
+</section>
+
+<section class="wrap split" id="control">
+  <div><div class="eyebrow">ANY VPN CONTROL</div><h2 style="margin-top:14px">Админка, которая говорит правду о деньгах</h2>
+    <p class="sub">Сводка показывает реальные поступления и две доли — 30% и 70%. Трата уже пополненного баланса не создаёт повторную выручку. Неясные исходы внешних операций не повторяются вслепую, а попадают оператору на сверку: платежи, смена локации, резервы промокодов, тестовые ключи партнёров.</p></div>
+  <div class="control"><img src="assets/control-dashboard.jpg" alt="ANY VPN CONTROL на демонстрационной базе" loading="lazy"></div>
+</section>
+
+<section class="wrap" id="arch">
+  <h2>Путь клиента и данных</h2>
+  <p class="sub">Бот — вход и уведомления. Всё клиентское — в WebApp. Секреты и база — в закрытом контуре.</p>
+  <div class="flow">
+    <div class="node"><b>Telegram</b><span>вход, Rich Message, уведомления</span></div>
+    <div class="node"><b>WebApp</b><span>React, HttpOnly-сессии</span></div>
+    <div class="node"><b>API</b><span>FastAPI · Flask · aiogram</span></div>
+    <div class="node"><b>PostgreSQL 18</b><span>приватная сеть, бэкапы</span></div>
+    <div class="node"><b>Remnawave · Happ</b><span>права подписки, crypt5</span></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Инженерные принципы</h2>
+  <div class="principles">
+    <div class="principle"><h3>Никаких догадок о деньгах</h3><p>Платёж засчитывается только при точном совпадении суммы, валюты и транзакции. Неизвестный результат — сверка, а не повтор.</p></div>
+    <div class="principle"><h3>Права клиента важнее удобства кода</h3><p>Оплаченное не исчезает при продлении, переносе локации или сбое панели.</p></div>
+    <div class="principle"><h3>Честные границы безопасности</h3><p>Секрет панели выносится на отдельный шлюз; абсолютная защита секрета от root на его же хосте не заявляется.</p></div>
+    <div class="principle"><h3>Движение с уважением</h3><p>Анимации останавливаются вне экрана и в фоне, системная настройка reduced motion соблюдается.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="status"><h2 style="font-size:28px">Статус</h2>
+    <ul><li>Продакшен работает на PostgreSQL 18 в изолированных контейнерах за HTTPS; боты подключены.</li>
+    <li>Клиентские функции бота перенесены в WebApp; бот остаётся входом и каналом уведомлений.</li>
+    <li>Подключение VPN-панели и платёжного провайдера — следующий шаг запуска.</li></ul></div>
+</section>
+
+<footer><div class="wrap"><span>ANY VPN · продукт и инженерия — <a href="https://github.com/G0d0v">G0d0v</a></span><span>Исходный код, данные и секреты не публикуются. Иконки — Lucide и Kubai Icons.</span></div></footer>
+</body>
+</html>

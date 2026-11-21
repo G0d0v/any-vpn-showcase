@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="560" viewBox="0 0 1280 560" role="img" aria-labelledby="t d">
+  <title id="t">ANY VPN — один кабинет, все подключения</title>
+  <desc id="d">Обложка кейса ANY VPN: Telegram WebApp, ANY VPN CONTROL и сервисная архитектура. Разработка G0d0v.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="0.55" stop-color="#111a2e"/>
+      <stop offset="1" stop-color="#0d1322"/>
+    </linearGradient>
+    <radialGradient id="glowBlue" cx="0.78" cy="0.42" r="0.45">
+      <stop offset="0" stop-color="#4f7fe9" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#4f7fe9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowViolet" cx="0.12" cy="0.95" r="0.5">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6c9dff"/>
+      <stop offset="1" stop-color="#3653b8"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#b9cdf7"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.035"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="560" rx="28" fill="url(#bg)"/>
+  <rect width="1280" height="560" rx="28" fill="url(#grid)"/>
+  <rect width="1280" height="560" rx="28" fill="url(#glowBlue)"/>
+  <rect width="1280" height="560" rx="28" fill="url(#glowViolet)"/>
+
+  <!-- copy -->
+  <g font-family="Manrope, 'Segoe UI', Inter, Arial, sans-serif">
+    <text x="88" y="142" fill="#8fb0ee" font-size="16" font-weight="700" letter-spacing="6">ANY VPN · G0D0V</text>
+    <text x="86" y="232" fill="url(#title)" font-size="74" font-weight="800" letter-spacing="-2">Один кабинет.</text>
+    <text x="86" y="314" fill="url(#title)" font-size="74" font-weight="800" letter-spacing="-2">Все подключения.</text>
+    <text x="90" y="372" fill="#9fb0cc" font-size="22">Telegram WebApp · ANY VPN CONTROL · PostgreSQL 18 · Happ</text>
+    <g transform="translate(90 412)">
+      <rect width="168" height="40" rx="20" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+      <circle cx="22" cy="20" r="5" fill="#82cab7">
+        <animate attributeName="opacity" values="1;0.35;1" dur="2.4s" repeatCount="indefinite"/>
+      </circle>
+      <text x="38" y="26" fill="#d6deef" font-size="15" font-weight="600">Идёт запуск</text>
+      <rect x="182" width="220" height="40" rx="20" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+      <text x="204" y="26" fill="#d6deef" font-size="15" font-weight="600">Исходный код закрыт</text>
+    </g>
+  </g>
+
+  <!-- orbit -->
+  <g transform="translate(985 280)">
+    <circle r="150" fill="#4f7fe9" opacity="0.18" filter="url(#soft)"/>
+    <g fill="none" stroke="#79a9ff" stroke-opacity="0.22">
+      <ellipse rx="190" ry="150" transform="rotate(-24)"/>
+      <ellipse rx="150" ry="118" transform="rotate(32)" stroke-opacity="0.3"/>
+    </g>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/>
+      <circle cx="0" cy="-150" r="6" fill="#8dafff"/>
+      <circle cx="150" cy="40" r="3.5" fill="#c4b5fd"/>
+    </g>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="26s" repeatCount="indefinite"/>
+      <circle cx="-118" cy="0" r="4.5" fill="#82cab7"/>
+    </g>
+    <g transform="rotate(-8)">
+      <rect x="-78" y="-78" width="156" height="156" rx="50" fill="url(#core)"/>
+      <rect x="-78" y="-78" width="156" height="156" rx="50" fill="none" stroke="#ffffff" stroke-opacity="0.25"/>
+    </g>
+    <path d="M0 -42 L34 -28 V4 C34 28 18 44 0 52 C-18 44 -34 28 -34 4 V-28 Z" fill="none" stroke="#eef3ff" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M-14 6 L-3 17 L17 -6" fill="none" stroke="#eef3ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <animate attributeName="stroke-dasharray" values="0 60;60 0;60 0" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>
